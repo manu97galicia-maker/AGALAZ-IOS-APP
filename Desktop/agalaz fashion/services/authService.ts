@@ -1,5 +1,6 @@
 import { createBrowserClient } from '@supabase/ssr';
 import type { AppUser } from '@/types';
+export type { AppUser };
 import type { User } from '@supabase/supabase-js';
 
 function getSupabase() {
