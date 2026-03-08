@@ -25,7 +25,7 @@ const translations = {
     feat1Title: 'Total Preservation',
     feat1Desc: 'Your pants, shoes and original background stay untouched. We only change what you ask.',
     feat2Title: 'Real Face Mapping',
-    feat2Desc: 'Aura integrates your identity onto your real body, respecting your features and neckline.',
+    feat2Desc: 'Agalaz integrates your identity onto your real body, respecting your features and neckline.',
     feat3Title: 'Color & Style',
     feat3Desc: 'We extract the DNA of the new garment and adapt it to your silhouette without distortion.',
 
@@ -46,7 +46,7 @@ const translations = {
     ctaDesc: '10 free renders. No credit card. No commitment.',
 
     // Footer
-    footerCopy: '© 2025 Aura Labs. Precision Engine V7.0',
+    footerCopy: '© 2025 Agalaz Labs. Precision Engine V7.0',
     privacy: 'Privacy',
     terms: 'Terms',
 
@@ -76,7 +76,7 @@ const translations = {
     begin: 'Begin',
 
     // Paywall
-    auraPro: 'Aura Pro',
+    auraPro: 'Agalaz Pro',
     precisionTotal: 'Total',
     precisionTitle: 'Precision',
     getPro: 'Get Pro $4.99/mo',
@@ -104,7 +104,7 @@ const translations = {
     feat1Title: 'Preservación Total',
     feat1Desc: 'Tus pantalones, calzado y fondo original se mantienen intactos. Solo cambiamos lo que pidas.',
     feat2Title: 'Mapeo Facial Real',
-    feat2Desc: 'Aura integra tu identidad sobre tu cuerpo real, respetando tu fisonomía y cuello.',
+    feat2Desc: 'Agalaz integra tu identidad sobre tu cuerpo real, respetando tu fisonomía y cuello.',
     feat3Title: 'Color & Estilo',
     feat3Desc: 'Extraemos el ADN de la prenda nueva y lo adaptamos a tu silueta sin deformaciones.',
 
@@ -122,7 +122,7 @@ const translations = {
     ctaTitleHighlight: 'Preservado.',
     ctaDesc: '10 renders gratuitos. Sin tarjeta de crédito. Sin compromisos.',
 
-    footerCopy: '© 2025 Aura Labs. Motor de Precisión V7.0',
+    footerCopy: '© 2025 Agalaz Labs. Motor de Precisión V7.0',
     privacy: 'Privacidad',
     terms: 'Términos',
 
@@ -149,7 +149,7 @@ const translations = {
     next: 'Siguiente',
     begin: 'Comenzar',
 
-    auraPro: 'Aura Pro',
+    auraPro: 'Agalaz Pro',
     precisionTotal: 'Total',
     precisionTitle: 'Precisión',
     getPro: 'Obtener Pro $4.99/mes',

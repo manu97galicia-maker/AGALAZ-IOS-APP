@@ -51,8 +51,8 @@ export default function HomePage() {
             <span className="text-white font-black text-xl italic">A</span>
           </div>
           <div>
-            <span className="text-lg font-black text-white tracking-tight">Aura</span>
-            <span className="text-[9px] font-bold text-indigo-400 block -mt-1 tracking-widest">FASHION AI</span>
+            <span className="text-lg font-black text-white tracking-tight">Agalaz</span>
+            <span className="text-[9px] font-bold text-indigo-400 block -mt-1 tracking-widest">FASHION</span>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -207,7 +207,7 @@ export default function HomePage() {
             <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center">
               <span className="text-white font-bold italic text-sm">A</span>
             </div>
-            <span className="font-black text-white/40 text-sm">Aura Fashion AI</span>
+            <span className="font-black text-white/40 text-sm">Agalaz Fashion</span>
           </div>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="text-white/20 text-xs hover:text-white/40 transition-colors">

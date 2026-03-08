@@ -18,7 +18,7 @@ export default function PrivacyPage() {
         <div className="space-y-6 text-white/50 text-sm leading-relaxed">
           <section>
             <h2 className="text-lg font-black text-white mb-2">1. Information We Collect</h2>
-            <p>Aura Fashion AI collects images you upload for virtual try-on processing. These images are processed in real-time and are <strong className="text-white/70">not stored permanently</strong> on our servers. We may collect basic usage analytics and account information if you sign in.</p>
+            <p>Agalaz Fashion collects images you upload for virtual try-on processing. These images are processed in real-time and are <strong className="text-white/70">not stored permanently</strong> on our servers. We may collect basic usage analytics and account information if you sign in.</p>
           </section>
 
           <section>

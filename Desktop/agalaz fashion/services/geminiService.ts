@@ -3,7 +3,7 @@ import { GoogleGenAI, type Chat } from "@google/genai";
 const API_KEY = process.env.GEMINI_API_KEY || '';
 
 const SYSTEM_INSTRUCTION = `
-You are Aura v7.0 "Precision Component Engine". Your specialty is surgical fashion editing.
+You are Agalaz v7.0 "Precision Component Engine". Your specialty is surgical fashion editing.
 
 STRICT PRESERVATION RULES:
 1. IMMUTABLE BASE (Img 2): This is your master structure. DO NOT change pants, shoes, background, hair, or pose. If the user wears shorts in Img 2, they MUST remain shorts.

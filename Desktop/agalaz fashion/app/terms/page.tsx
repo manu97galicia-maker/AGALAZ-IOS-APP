@@ -18,12 +18,12 @@ export default function TermsPage() {
         <div className="space-y-6 text-white/50 text-sm leading-relaxed">
           <section>
             <h2 className="text-lg font-black text-white mb-2">1. Acceptance of Terms</h2>
-            <p>By using Aura Fashion AI, you agree to these terms. If you do not agree, please do not use the service.</p>
+            <p>By using Agalaz Fashion, you agree to these terms. If you do not agree, please do not use the service.</p>
           </section>
 
           <section>
             <h2 className="text-lg font-black text-white mb-2">2. Service Description</h2>
-            <p>Aura Fashion AI provides AI-powered virtual clothing try-on. Results are generated using artificial intelligence and may not perfectly represent real-world appearance. The service is provided &ldquo;as is&rdquo; without guarantees of accuracy.</p>
+            <p>Agalaz Fashion provides AI-powered virtual clothing try-on. Results are generated using artificial intelligence and may not perfectly represent real-world appearance. The service is provided &ldquo;as is&rdquo; without guarantees of accuracy.</p>
           </section>
 
           <section>
@@ -43,7 +43,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-black text-white mb-2">6. Limitation of Liability</h2>
-            <p>Aura Labs shall not be liable for any indirect, incidental, or consequential damages arising from the use of this service.</p>
+            <p>Agalaz Labs shall not be liable for any indirect, incidental, or consequential damages arising from the use of this service.</p>
           </section>
 
           <section>

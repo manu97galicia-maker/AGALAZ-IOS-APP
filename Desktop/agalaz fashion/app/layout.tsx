@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Aura Fashion AI — Virtual Try-On',
+  title: 'Agalaz Fashion — Virtual Try-On',
   description:
     'Upload your photo, pick any clothing and see how it looks on you instantly. AI-powered virtual try-on that respects your real body.',
   keywords: [
@@ -20,24 +20,24 @@ export const metadata: Metadata = {
     'AI fashion',
     'try before you buy',
     'clothing AI',
-    'Aura Fashion',
+    'Agalaz Fashion',
     'prueba de ropa virtual',
   ],
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Aura',
+    title: 'Agalaz',
   },
   openGraph: {
-    title: 'Aura Fashion AI — Virtual Try-On',
+    title: 'Agalaz Fashion — Virtual Try-On',
     description: 'Try any clothing before you buy. AI that respects your real body.',
     type: 'website',
-    siteName: 'Aura Fashion AI',
+    siteName: 'Agalaz Fashion',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Aura Fashion AI — Virtual Try-On',
+    title: 'Agalaz Fashion — Virtual Try-On',
     description: 'Try any clothing before you buy. AI that respects your real body.',
   },
   robots: { index: true, follow: true },
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Aura" />
+        <meta name="apple-mobile-web-app-title" content="Agalaz" />
       </head>
       <body className="bg-black text-white antialiased overscroll-none">
         <LanguageProvider>

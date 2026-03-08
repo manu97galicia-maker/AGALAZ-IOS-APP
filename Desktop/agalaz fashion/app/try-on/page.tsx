@@ -185,8 +185,8 @@ export default function TryOnPage() {
     if (navigator.share) {
       try {
         const blob = await fetch(imageUrl).then(r => r.blob());
-        const file = new File([blob], 'aura-tryon.png', { type: 'image/png' });
-        await navigator.share({ files: [file], title: 'Aura Fashion AI' });
+        const file = new File([blob], 'agalaz-tryon.png', { type: 'image/png' });
+        await navigator.share({ files: [file], title: 'Agalaz Fashion' });
       } catch {}
     }
   };
@@ -194,7 +194,7 @@ export default function TryOnPage() {
   const handleDownloadImage = (imageUrl: string) => {
     const a = document.createElement('a');
     a.href = imageUrl;
-    a.download = 'aura-tryon.png';
+    a.download = 'agalaz-tryon.png';
     a.click();
   };
 
@@ -240,7 +240,7 @@ export default function TryOnPage() {
                   <span className="text-white font-black text-lg italic">A</span>
                 </div>
                 <div>
-                  <h1 className="text-sm font-black tracking-tight text-white leading-tight">Aura</h1>
+                  <h1 className="text-sm font-black tracking-tight text-white leading-tight">Agalaz</h1>
                   <span className="text-[8px] font-bold text-indigo-400 uppercase tracking-widest">
                     Engine V7.0
                   </span>
