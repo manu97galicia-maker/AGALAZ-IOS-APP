@@ -71,6 +71,10 @@ const translations = {
     seamlessId: 'Seamless ID',
     segmented: 'Outfit segmented. Pants and background preserved.',
 
+    // Try-on extras
+    bodyHint: 'Head to feet for best results',
+    optional: 'optional',
+
     // Onboarding
     next: 'Next',
     begin: 'Begin',
@@ -145,6 +149,9 @@ const translations = {
     outfitPreserved: 'Outfit Preservado',
     seamlessId: 'Seamless ID',
     segmented: 'Outfit segmentado. Pantalones y fondo preservados.',
+
+    bodyHint: 'De cabeza a pies para mejor resultado',
+    optional: 'opcional',
 
     next: 'Siguiente',
     begin: 'Comenzar',

@@ -16,7 +16,7 @@ STRICT PRESERVATION RULES:
 export async function generateTryOnImage(
   faceImage: string,
   bodyImage: string,
-  clothingImage: string,
+  clothingImage?: string,
   modificationPrompt?: string,
   lastRenderedImage?: string
 ): Promise<string | null> {
@@ -26,26 +26,48 @@ export async function generateTryOnImage(
     const parts: any[] = [
       { inlineData: { mimeType: 'image/jpeg', data: faceImage } },
       { inlineData: { mimeType: 'image/jpeg', data: bodyImage } },
-      { inlineData: { mimeType: 'image/jpeg', data: clothingImage } },
     ];
+
+    if (clothingImage) {
+      parts.push({ inlineData: { mimeType: 'image/jpeg', data: clothingImage } });
+    }
 
     if (lastRenderedImage) {
       const base64Data = lastRenderedImage.split(',')[1] || lastRenderedImage;
       parts.push({ inlineData: { mimeType: 'image/png', data: base64Data } });
     }
 
-    const promptBase = `STRICT EDITORIAL COMPOSITING & CONSISTENCY:
-    - IDENTITY (IMG 1): Source for the face.
-    - STRUCTURE (IMG 2): Source for the body pose, background, and environment.
-    - GARMENT (IMG 3): Source for the top clothing.
-    ${lastRenderedImage ? `- CURRENT STATE (IMG 4): This is the PREVIOUS RENDER. You MUST use this as your absolute reference for composition. Do NOT change the background, lighting, pose, or body shape from IMG 4.` : ''}
+    const hasGarment = !!clothingImage;
+    const imgOffset = hasGarment ? 0 : -1;
+    const lastImgLabel = hasGarment
+      ? (lastRenderedImage ? 'IMG 4' : null)
+      : (lastRenderedImage ? 'IMG 3' : null);
 
-    CRITICAL TASK: ${modificationPrompt ? `Modify the image according to: "${modificationPrompt}". Start from ${lastRenderedImage ? 'IMG 4' : 'the composition'} and apply the change. Keep every other pixel as close to ${lastRenderedImage ? 'IMG 4' : 'the original body (IMG 2)'} as possible.` : "Seamlessly integrate the face (IMG 1) and the top garment (IMG 3) onto the body (IMG 2)."}
+    const promptBase = hasGarment
+      ? `STRICT EDITORIAL COMPOSITING & CONSISTENCY:
+    - IDENTITY (IMG 1): Source for the face.
+    - STRUCTURE (IMG 2): Source for the body pose, background, and environment. MUST be a full-body photo from head to feet.
+    - GARMENT (IMG 3): Source for the top clothing.
+    ${lastImgLabel ? `- CURRENT STATE (${lastImgLabel}): This is the PREVIOUS RENDER. You MUST use this as your absolute reference for composition. Do NOT change the background, lighting, pose, or body shape from ${lastImgLabel}.` : ''}
+
+    CRITICAL TASK: ${modificationPrompt ? `Modify the image according to: "${modificationPrompt}". Start from ${lastImgLabel || 'the composition'} and apply the change. Keep every other pixel as close to ${lastImgLabel || 'the original body (IMG 2)'} as possible.` : "Seamlessly integrate the face (IMG 1) and the top garment (IMG 3) onto the body (IMG 2)."}
 
     GOLDEN RULES:
-    1. PRESERVATION: Pants, shoes, and background from IMG 2 (or IMG 4 if exists) are SACRED. Do not alter unless asked.
-    2. CONSISTENCY: If IMG 4 exists, the result must be a visual twin of IMG 4 with the requested change.
+    1. PRESERVATION: Pants, shoes, and background from IMG 2 (or ${lastImgLabel || 'IMG 2'} if exists) are SACRED. Do not alter unless asked.
+    2. CONSISTENCY: If ${lastImgLabel || 'a previous render'} exists, the result must be a visual twin with the requested change.
     3. REALISM: Shadows and lighting must match perfectly.
+
+    QUALITY: 8k, photorealistic, perfect skin blending, no anatomical distortions.`
+      : `FACE SWAP & BODY PRESERVATION:
+    - IDENTITY (IMG 1): Source for the face.
+    - STRUCTURE (IMG 2): Source for the body, clothing, pose, background, and environment. MUST be a full-body photo from head to feet.
+    ${lastImgLabel ? `- CURRENT STATE (${lastImgLabel}): This is the PREVIOUS RENDER. Use as absolute reference.` : ''}
+
+    CRITICAL TASK: ${modificationPrompt ? `Modify the image according to: "${modificationPrompt}". Keep every other pixel as close to ${lastImgLabel || 'IMG 2'} as possible.` : "Seamlessly map the face from IMG 1 onto the body in IMG 2. Keep the ENTIRE outfit, pose, background, and body proportions from IMG 2 completely unchanged."}
+
+    GOLDEN RULES:
+    1. PRESERVATION: ALL clothing, shoes, accessories, and background from IMG 2 are SACRED. Change NOTHING except the face.
+    2. REALISM: Skin tone blending, lighting, and shadows must match perfectly.
 
     QUALITY: 8k, photorealistic, perfect skin blending, no anatomical distortions.`;
 

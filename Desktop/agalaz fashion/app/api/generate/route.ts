@@ -6,14 +6,14 @@ export async function POST(request: NextRequest) {
     const { faceImage, bodyImage, clothingImage, modificationPrompt, lastRenderedImage } =
       await request.json();
 
-    if (!faceImage || !bodyImage || !clothingImage) {
-      return NextResponse.json({ error: 'Missing required images.' }, { status: 400 });
+    if (!faceImage || !bodyImage) {
+      return NextResponse.json({ error: 'Face and body photos are required.' }, { status: 400 });
     }
 
     const result = await generateTryOnImage(
       faceImage,
       bodyImage,
-      clothingImage,
+      clothingImage || undefined,
       modificationPrompt,
       lastRenderedImage
     );
@@ -21,9 +21,12 @@ export async function POST(request: NextRequest) {
     if (result) {
       return NextResponse.json({ image: result });
     }
-    return NextResponse.json({ error: 'Precision error. Try with frontal photos.' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Could not generate image. Make sure your body photo shows full body from head to feet, and use frontal photos for best results.' },
+      { status: 500 }
+    );
   } catch (error) {
     console.error('Generate API error:', error);
-    return NextResponse.json({ error: 'Component engine failure.' }, { status: 500 });
+    return NextResponse.json({ error: 'Component engine failure. Please try again.' }, { status: 500 });
   }
 }

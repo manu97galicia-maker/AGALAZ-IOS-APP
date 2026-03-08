@@ -77,8 +77,22 @@ export default function TryOnPage() {
     setError(null);
   };
 
+  const saveToGallery = async (imageUrl: string) => {
+    try {
+      const blob = await fetch(imageUrl).then(r => r.blob());
+      const file = new File([blob], `agalaz-${Date.now()}.png`, { type: 'image/png' });
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        return;
+      }
+      const a = document.createElement('a');
+      a.href = imageUrl;
+      a.download = `agalaz-${Date.now()}.png`;
+      a.click();
+    } catch {}
+  };
+
   const handleStartAnalysis = async () => {
-    if (!faceImage || !bodyImage || !clothingImage) {
+    if (!faceImage || !bodyImage) {
       setError(t.missingPhotos);
       return;
     }
@@ -103,10 +117,11 @@ export default function TryOnPage() {
       if (data.image) {
         setMessages([{
           role: Role.MODEL,
-          text: t.segmented,
+          text: clothingImage ? t.segmented : (t.seamlessId),
           image: data.image,
         }]);
         setRenderCount((prev) => prev + 1);
+        saveToGallery(data.image);
       } else {
         setError(data.error || t.precisionError);
       }
@@ -171,6 +186,7 @@ export default function TryOnPage() {
             }
             return newMsgs;
           });
+          saveToGallery(genData.image);
         }
         setIsGeneratingImage(false);
       }
@@ -199,7 +215,7 @@ export default function TryOnPage() {
   };
 
   const isLoading = isAnalyzing || isGeneratingImage;
-  const canRender = faceImage && bodyImage && clothingImage && !isLoading;
+  const canRender = faceImage && bodyImage && !isLoading;
 
   return (
     <>
@@ -316,21 +332,28 @@ export default function TryOnPage() {
                     onImageSelect={setFaceImage}
                     icon={<Fingerprint size={20} className="text-indigo-400" />}
                   />
+                  <div>
+                    <ImageUploader
+                      label={t.bodyLabel}
+                      type="user"
+                      image={bodyImage}
+                      onImageSelect={setBodyImage}
+                      icon={<UserSquare2 size={20} className="text-emerald-400" />}
+                    />
+                    <p className="text-[8px] font-bold text-white/20 text-center mt-1 px-1">
+                      {t.bodyHint}
+                    </p>
+                  </div>
+                </div>
+                <div>
                   <ImageUploader
-                    label={t.bodyLabel}
-                    type="user"
-                    image={bodyImage}
-                    onImageSelect={setBodyImage}
-                    icon={<UserSquare2 size={20} className="text-emerald-400" />}
+                    label={`${t.clothingLabel} (${t.optional})`}
+                    type="clothing"
+                    image={clothingImage}
+                    onImageSelect={setClothingImage}
+                    icon={<Shirt size={20} className="text-amber-400" />}
                   />
                 </div>
-                <ImageUploader
-                  label={t.clothingLabel}
-                  type="clothing"
-                  image={clothingImage}
-                  onImageSelect={setClothingImage}
-                  icon={<Shirt size={20} className="text-amber-400" />}
-                />
               </div>
 
               {error && (
