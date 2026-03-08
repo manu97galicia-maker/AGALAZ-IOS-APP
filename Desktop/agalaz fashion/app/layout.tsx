@@ -1,40 +1,61 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
+import { LanguageProvider } from '@/components/LanguageProvider';
 import './globals.css';
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  themeColor: '#000000',
+};
+
 export const metadata: Metadata = {
-  title: 'Aura Fashion AI - Prueba Ropa con Inteligencia Artificial',
+  title: 'Aura Fashion AI — Virtual Try-On',
   description:
-    'Sube tu foto, elige cualquier prenda y ve cómo te queda al instante. Virtual Try-On con IA que respeta tu cuerpo real. Preservación total de outfit, mapeo facial sin costuras.',
+    'Upload your photo, pick any clothing and see how it looks on you instantly. AI-powered virtual try-on that respects your real body.',
   keywords: [
     'virtual try-on',
-    'prueba de ropa virtual',
-    'inteligencia artificial moda',
     'AI fashion',
-    'probador virtual',
+    'try before you buy',
+    'clothing AI',
     'Aura Fashion',
+    'prueba de ropa virtual',
   ],
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Aura',
+  },
   openGraph: {
-    title: 'Aura Fashion AI - Virtual Try-On con IA',
-    description:
-      'Prueba cualquier prenda antes de comprar. IA que respeta tu cuerpo real con preservación total de outfit.',
+    title: 'Aura Fashion AI — Virtual Try-On',
+    description: 'Try any clothing before you buy. AI that respects your real body.',
     type: 'website',
-    locale: 'es_ES',
     siteName: 'Aura Fashion AI',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Aura Fashion AI - Virtual Try-On con IA',
-    description:
-      'Prueba cualquier prenda antes de comprar. IA que respeta tu cuerpo real.',
+    title: 'Aura Fashion AI — Virtual Try-On',
+    description: 'Try any clothing before you buy. AI that respects your real body.',
   },
   robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
-      <body className="bg-[#0a0a0a] text-white antialiased">
-        {children}
+    <html lang="en" className="dark">
+      <head>
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Aura" />
+      </head>
+      <body className="bg-black text-white antialiased overscroll-none">
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

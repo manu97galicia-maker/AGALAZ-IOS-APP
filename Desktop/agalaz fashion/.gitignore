@@ -16,3 +16,10 @@ dist/
 *.njsproj
 *.sln
 *.sw?
+
+# Non-project folders
+Descargas/
+.claude/
+.expo/
+
+.vercel

@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
       await request.json();
 
     if (!faceImage || !bodyImage || !clothingImage) {
-      return NextResponse.json({ error: 'Faltan imágenes requeridas.' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing required images.' }, { status: 400 });
     }
 
     const result = await generateTryOnImage(
@@ -21,9 +21,9 @@ export async function POST(request: NextRequest) {
     if (result) {
       return NextResponse.json({ image: result });
     }
-    return NextResponse.json({ error: 'Error de precisión. Intenta con fotos frontales.' }, { status: 500 });
+    return NextResponse.json({ error: 'Precision error. Try with frontal photos.' }, { status: 500 });
   } catch (error) {
     console.error('Generate API error:', error);
-    return NextResponse.json({ error: 'Falla en el motor de componentes.' }, { status: 500 });
+    return NextResponse.json({ error: 'Component engine failure.' }, { status: 500 });
   }
 }

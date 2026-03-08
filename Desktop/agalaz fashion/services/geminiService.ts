@@ -3,14 +3,14 @@ import { GoogleGenAI, type Chat } from "@google/genai";
 const API_KEY = process.env.GEMINI_API_KEY || '';
 
 const SYSTEM_INSTRUCTION = `
-Eres Aura v7.0 "Precision Component Engine". Tu especialidad es la edición quirúrgica de moda.
+You are Aura v7.0 "Precision Component Engine". Your specialty is surgical fashion editing.
 
-REGLAS DE PRESERVACIÓN ESTRICTA:
-1. BASE INAMOVIBLE (Img 2): Esta es tu estructura maestra. NO cambies los pantalones, zapatos, fondo, cabello ni la pose. Si el usuario lleva pantalones cortos en Img 2, DEBEN seguir siendo pantalones cortos.
-2. MAPEO FACIAL (Img 1): Proyecta la identidad facial de Img 1 sobre la cabeza de Img 2. El cuello y la línea de la mandíbula de Img 2 deben mantenerse para una transición natural. Evita el efecto de "máscara superpuesta".
-3. REEMPLAZO DE TORSO (Img 3): Sustituye ÚNICAMENTE la prenda superior (camiseta/chaqueta) de Img 2 por el estilo y color de Img 3.
-4. COHERENCIA FOTOGRÁFICA: El resultado final debe conservar el grano, la resolución y la iluminación exacta de la foto original del cuerpo (Img 2).
-5. TEXTO: Responde con elegancia técnica en menos de 8 palabras.
+STRICT PRESERVATION RULES:
+1. IMMUTABLE BASE (Img 2): This is your master structure. DO NOT change pants, shoes, background, hair, or pose. If the user wears shorts in Img 2, they MUST remain shorts.
+2. FACIAL MAPPING (Img 1): Project the facial identity from Img 1 onto the head of Img 2. The neck and jawline of Img 2 must be maintained for a natural transition. Avoid the "overlaid mask" effect.
+3. TORSO REPLACEMENT (Img 3): Replace ONLY the upper garment (shirt/jacket) of Img 2 with the style and color from Img 3.
+4. PHOTOGRAPHIC COHERENCE: The final result must preserve the grain, resolution, and exact lighting of the original body photo (Img 2).
+5. TEXT: Respond with technical elegance in fewer than 8 words.
 `;
 
 export async function generateTryOnImage(
@@ -42,10 +42,10 @@ export async function generateTryOnImage(
 
     CRITICAL TASK: ${modificationPrompt ? `Modify the image according to: "${modificationPrompt}". Start from ${lastRenderedImage ? 'IMG 4' : 'the composition'} and apply the change. Keep every other pixel as close to ${lastRenderedImage ? 'IMG 4' : 'the original body (IMG 2)'} as possible.` : "Seamlessly integrate the face (IMG 1) and the top garment (IMG 3) onto the body (IMG 2)."}
 
-    REGLAS DE ORO:
-    1. PRESERVACIÓN: Los pantalones, zapatos y fondo de IMG 2 (o IMG 4 si existe) son SAGRADOS. No los alteres a menos que se pida.
-    2. CONSISTENCIA: Si existe IMG 4, el resultado debe ser un gemelo visual de IMG 4 con el cambio solicitado.
-    3. REALISMO: Sombras y luces deben coincidir perfectamente.
+    GOLDEN RULES:
+    1. PRESERVATION: Pants, shoes, and background from IMG 2 (or IMG 4 if exists) are SACRED. Do not alter unless asked.
+    2. CONSISTENCY: If IMG 4 exists, the result must be a visual twin of IMG 4 with the requested change.
+    3. REALISM: Shadows and lighting must match perfectly.
 
     QUALITY: 8k, photorealistic, perfect skin blending, no anatomical distortions.`;
 
@@ -68,7 +68,7 @@ export async function generateTryOnImage(
     }
     return null;
   } catch (error) {
-    console.error("Error en renderizado de precisión:", error);
+    console.error("Precision rendering error:", error);
     return null;
   }
 }

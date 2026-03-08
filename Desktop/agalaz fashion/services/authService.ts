@@ -14,7 +14,7 @@ export const signInWithGoogle = async () => {
   const supabase = getSupabase();
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: 'https://agalaz.com/try-on' },
+    options: { redirectTo: `${window.location.origin}/try-on` },
   });
   if (error) throw error;
 };
@@ -23,7 +23,7 @@ export const signInWithApple = async () => {
   const supabase = getSupabase();
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'apple',
-    options: { redirectTo: 'https://agalaz.com/try-on' },
+    options: { redirectTo: `${window.location.origin}/try-on` },
   });
   if (error) throw error;
 };
@@ -37,7 +37,7 @@ export const signOut = async () => {
 export const mapUser = (user: User): AppUser => {
   const meta = user.user_metadata || {};
   return {
-    name: meta.full_name || meta.name || user.email?.split('@')[0] || 'Usuario',
+    name: meta.full_name || meta.name || user.email?.split('@')[0] || 'User',
     email: user.email || '',
     avatar: meta.avatar_url || meta.picture || '',
     provider: user.app_metadata?.provider || 'email',

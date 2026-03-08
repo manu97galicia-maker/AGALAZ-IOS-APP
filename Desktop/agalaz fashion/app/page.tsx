@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   Sparkles,
@@ -8,102 +10,106 @@ import {
   Shirt,
   Zap,
   ShieldCheck,
+  ChevronRight,
 } from 'lucide-react';
-
-const FEATURES = [
-  {
-    icon: Target,
-    title: 'Preservación Total',
-    desc: 'Tus pantalones, calzado y fondo original se mantienen intactos. Solo cambiamos lo que pidas.',
-    color: 'text-indigo-400',
-    bg: 'bg-indigo-500/10',
-  },
-  {
-    icon: Fingerprint,
-    title: 'Mapeo Facial Real',
-    desc: 'Aura integra tu identidad sobre tu cuerpo real, respetando tu fisonomía y cuello.',
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10',
-  },
-  {
-    icon: Shirt,
-    title: 'Color & Estilo',
-    desc: 'Extraemos el ADN de la prenda nueva y lo adaptamos a tu silueta sin deformaciones.',
-    color: 'text-indigo-400',
-    bg: 'bg-indigo-500/10',
-  },
-];
+import { useLang } from '@/components/LanguageProvider';
+import { LanguageToggle } from '@/components/LanguageToggle';
 
 export default function HomePage() {
+  const { t } = useLang();
+
+  const FEATURES = [
+    {
+      icon: Target,
+      title: t.feat1Title,
+      desc: t.feat1Desc,
+      gradient: 'from-indigo-500/20 to-violet-500/20',
+      iconColor: 'text-indigo-400',
+    },
+    {
+      icon: Fingerprint,
+      title: t.feat2Title,
+      desc: t.feat2Desc,
+      gradient: 'from-emerald-500/20 to-teal-500/20',
+      iconColor: 'text-emerald-400',
+    },
+    {
+      icon: Shirt,
+      title: t.feat3Title,
+      desc: t.feat3Desc,
+      gradient: 'from-amber-500/20 to-orange-500/20',
+      iconColor: 'text-amber-400',
+    },
+  ];
+
   return (
-    <main className="min-h-screen bg-[#0a0a0a]">
+    <main className="min-h-screen bg-black overflow-hidden">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto animate-fade-in">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center">
-            <span className="text-black font-bold text-xl italic">A</span>
+          <div className="w-11 h-11 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <span className="text-white font-black text-xl italic">A</span>
           </div>
-          <span className="text-xl font-black text-white tracking-tight">Aura</span>
+          <div>
+            <span className="text-lg font-black text-white tracking-tight">Aura</span>
+            <span className="text-[9px] font-bold text-indigo-400 block -mt-1 tracking-widest">FASHION AI</span>
+          </div>
         </div>
-        <Link
-          href="/try-on"
-          className="px-6 py-2.5 bg-indigo-600 text-white text-xs font-black uppercase tracking-widest rounded-full hover:bg-indigo-500 transition-colors"
-        >
-          Empezar
-        </Link>
+        <div className="flex items-center gap-3">
+          <LanguageToggle />
+          <Link
+            href="/try-on"
+            className="px-5 py-2.5 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white/90 transition-all press-scale"
+          >
+            {t.start}
+          </Link>
+        </div>
       </nav>
 
       {/* Hero */}
-      <section className="max-w-6xl mx-auto px-6 pt-20 pb-32">
-        <div className="animate-fade-in">
-          <div className="flex items-center gap-2 px-4 py-2 bg-indigo-600/20 rounded-full w-fit border border-indigo-500/20 mb-8">
+      <section className="max-w-6xl mx-auto px-6 pt-16 pb-24 md:pt-24 md:pb-32">
+        <div className="animate-fade-in-up">
+          <div className="flex items-center gap-2 px-4 py-2 glass rounded-full w-fit mb-8">
             <Sparkles size={12} className="text-indigo-400 fill-indigo-400" />
             <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">
-              Virtual Try-On con IA
+              Virtual Try-On AI
             </span>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9]">
-            PRUEBA
+          <h1 className="text-[3.5rem] md:text-[7rem] font-black text-white tracking-tighter leading-[0.85]">
+            {t.heroLine1}
             <br />
-            <span className="text-indigo-400 italic">ANTES DE</span>
+            <span className="text-gradient italic">{t.heroLine2}</span>
             <br />
-            COMPRAR.
+            {t.heroLine3}
           </h1>
 
-          <p className="text-lg text-white/50 font-medium leading-relaxed mt-8 max-w-xl">
-            Sube tu foto, elige cualquier prenda y ve cómo te queda al instante.
-            IA que respeta tu cuerpo real.
+          <p className="text-base md:text-lg text-white/40 font-medium leading-relaxed mt-8 max-w-xl">
+            {t.heroDesc}
           </p>
 
-          <div className="flex items-center gap-4 mt-8">
-            <div className="flex gap-1">
+          <div className="flex items-center gap-4 mt-6">
+            <div className="flex gap-0.5">
               {[1, 2, 3, 4, 5].map((i) => (
-                <Star
-                  key={i}
-                  size={14}
-                  className="text-yellow-400 fill-yellow-400"
-                />
+                <Star key={i} size={14} className="text-amber-400 fill-amber-400" />
               ))}
             </div>
-            <span className="text-xs text-white/40 font-bold">
-              +10,000 usuarios activos
-            </span>
+            <span className="text-xs text-white/30 font-bold">{t.activeUsers}</span>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 mt-12">
+          <div className="flex flex-col sm:flex-row gap-3 mt-10">
             <Link
               href="/try-on"
-              className="flex items-center justify-center gap-3 px-10 py-5 bg-white text-black font-black uppercase tracking-widest text-xs rounded-[2rem] hover:bg-white/90 transition-colors"
+              className="flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:opacity-90 transition-all press-scale shadow-xl shadow-indigo-500/25 animate-glow"
             >
               <Sparkles size={18} />
-              Probar Ahora Gratis
+              {t.tryNow}
             </Link>
             <Link
               href="/onboarding"
-              className="flex items-center justify-center gap-2 px-10 py-5 bg-white/5 border border-white/10 text-white/60 font-bold text-sm rounded-[2rem] hover:bg-white/10 transition-colors"
+              className="flex items-center justify-center gap-2 px-10 py-4 glass text-white/60 font-bold text-sm rounded-2xl hover:bg-white/10 transition-all press-scale"
             >
-              Cómo funciona
+              {t.howItWorks}
               <ArrowRight size={16} />
             </Link>
           </div>
@@ -111,81 +117,85 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="max-w-6xl mx-auto px-6 pb-32">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-            Precisión <span className="text-indigo-400 italic">Quirúrgica</span>
+      <section className="max-w-6xl mx-auto px-6 pb-28">
+        <div className="text-center mb-14 animate-fade-in">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+            {t.featuresTitle}{' '}
+            <span className="text-gradient italic">{t.featuresTitleHighlight}</span>
           </h2>
-          <p className="text-white/40 mt-4 max-w-lg mx-auto">
-            Motor de componentes V7.0 — cada píxel preservado, cada prenda respetada.
+          <p className="text-white/30 mt-4 max-w-lg mx-auto text-sm">
+            {t.featuresSubtitle}
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-4">
           {FEATURES.map((f, i) => (
             <div
               key={i}
-              className="p-8 rounded-[2rem] bg-white/[0.03] border border-white/[0.06] hover:border-white/10 transition-colors"
+              className="p-7 rounded-3xl glass hover:bg-white/[0.06] transition-all press-scale opacity-0 animate-fade-in-up"
+              style={{ animationDelay: `${i * 150}ms`, animationFillMode: 'forwards' }}
             >
-              <div className={`p-4 ${f.bg} rounded-2xl w-fit mb-6`}>
-                <f.icon size={28} className={f.color} />
+              <div className={`p-4 bg-gradient-to-br ${f.gradient} rounded-2xl w-fit mb-5`}>
+                <f.icon size={26} className={f.iconColor} />
               </div>
-              <h3 className="text-xl font-black text-white mb-3">{f.title}</h3>
-              <p className="text-white/40 font-medium leading-relaxed text-sm">
-                {f.desc}
-              </p>
+              <h3 className="text-lg font-black text-white mb-2">{f.title}</h3>
+              <p className="text-white/35 font-medium leading-relaxed text-[13px]">{f.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* How it works */}
-      <section className="max-w-6xl mx-auto px-6 pb-32">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-            3 Fotos. <span className="text-indigo-400 italic">1 Render.</span>
+      <section className="max-w-6xl mx-auto px-6 pb-28">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+            {t.stepsTitle}{' '}
+            <span className="text-gradient italic">{t.stepsTitleHighlight}</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6">
           {[
-            { step: '01', icon: Fingerprint, label: 'ID Rostro', desc: 'Sube una foto de tu cara para el mapeo facial.' },
-            { step: '02', icon: ShieldCheck, label: 'Foto Base', desc: 'Una foto de cuerpo completo — preservamos todo excepto la prenda superior.' },
-            { step: '03', icon: Shirt, label: 'Prenda Nueva', desc: 'Elige la prenda que quieres probar — extraemos su color y estilo.' },
+            { step: '01', icon: Fingerprint, label: t.step1Label, desc: t.step1Desc, color: 'text-indigo-400' },
+            { step: '02', icon: ShieldCheck, label: t.step2Label, desc: t.step2Desc, color: 'text-emerald-400' },
+            { step: '03', icon: Shirt, label: t.step3Label, desc: t.step3Desc, color: 'text-amber-400' },
           ].map((item, i) => (
-            <div key={i} className="text-center">
-              <div className="text-6xl font-black text-white/5 mb-4">{item.step}</div>
-              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <item.icon size={28} className="text-white/40" />
+            <div
+              key={i}
+              className="text-center opacity-0 animate-fade-in-up"
+              style={{ animationDelay: `${i * 200}ms`, animationFillMode: 'forwards' }}
+            >
+              <div className="text-7xl font-black text-white/[0.03] mb-4">{item.step}</div>
+              <div className="w-16 h-16 glass rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <item.icon size={28} className={item.color} />
               </div>
               <h3 className="text-lg font-black text-white mb-2">{item.label}</h3>
-              <p className="text-white/40 text-sm">{item.desc}</p>
+              <p className="text-white/35 text-sm">{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="max-w-6xl mx-auto px-6 pb-20">
-        <div className="bg-gradient-to-br from-indigo-600/20 to-indigo-600/5 border border-indigo-500/20 rounded-[2.5rem] p-12 md:p-16 text-center">
+      <section className="max-w-6xl mx-auto px-6 pb-16">
+        <div className="bg-gradient-to-br from-indigo-600/15 via-violet-600/10 to-indigo-600/5 border border-indigo-500/15 rounded-[2rem] p-10 md:p-16 text-center animate-fade-in">
           <div className="flex items-center justify-center gap-2 mb-6">
             <Zap size={16} className="text-indigo-400 fill-indigo-400" />
-            <span className="text-xs font-black uppercase tracking-widest text-indigo-400">
-              Comienza Gratis
+            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">
+              {t.ctaLabel}
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
-            Tu Estilo, <span className="italic text-indigo-400">Preservado.</span>
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
+            {t.ctaTitle}{' '}
+            <span className="italic text-gradient">{t.ctaTitleHighlight}</span>
           </h2>
-          <p className="text-white/40 mb-10 max-w-md mx-auto">
-            10 renders gratuitos. Sin tarjeta de crédito. Sin compromisos.
-          </p>
+          <p className="text-white/35 mb-8 max-w-md mx-auto text-sm">{t.ctaDesc}</p>
           <Link
             href="/try-on"
-            className="inline-flex items-center gap-3 px-12 py-5 bg-white text-black font-black uppercase tracking-widest text-xs rounded-[2rem] hover:bg-white/90 transition-colors"
+            className="inline-flex items-center gap-3 px-10 py-4 bg-white text-black font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-white/90 transition-all press-scale"
           >
             <Sparkles size={18} />
-            Probar Ahora
+            {t.tryNow}
           </Link>
         </div>
       </section>
@@ -194,14 +204,20 @@ export default function HomePage() {
       <footer className="border-t border-white/5 py-8 px-6 max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-white rounded-xl flex items-center justify-center">
-              <span className="text-black font-bold italic text-sm">A</span>
+            <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold italic text-sm">A</span>
             </div>
-            <span className="font-black text-white/60 text-sm">Aura Fashion AI</span>
+            <span className="font-black text-white/40 text-sm">Aura Fashion AI</span>
           </div>
-          <p className="text-white/20 text-xs">
-            &copy; 2025 Aura Labs. Motor de Precisión V7.0
-          </p>
+          <div className="flex items-center gap-6">
+            <Link href="/privacy" className="text-white/20 text-xs hover:text-white/40 transition-colors">
+              {t.privacy}
+            </Link>
+            <Link href="/terms" className="text-white/20 text-xs hover:text-white/40 transition-colors">
+              {t.terms}
+            </Link>
+          </div>
+          <p className="text-white/15 text-xs">{t.footerCopy}</p>
         </div>
       </footer>
     </main>
