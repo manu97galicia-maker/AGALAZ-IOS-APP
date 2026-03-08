@@ -31,11 +31,11 @@ export default function PaywallPage() {
       cta: en ? 'Start Weekly Plan' : 'Empezar Plan Semanal',
     },
     yearly: {
-      price: '$29.99',
+      price: '$59.99',
       period: en ? '/year' : '/año',
-      perDay: en ? '$0.08/day' : '0,08€/día',
+      perDay: en ? '$0.16/day' : '0,16€/día',
       label: en ? 'Yearly' : 'Anual',
-      badge: en ? 'Save 88%' : 'Ahorra 88%',
+      badge: en ? 'Save 77%' : 'Ahorra 77%',
       cta: en ? 'Start Yearly Plan' : 'Empezar Plan Anual',
     },
   };
