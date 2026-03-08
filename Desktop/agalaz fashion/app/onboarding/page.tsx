@@ -241,9 +241,9 @@ export default function OnboardingPage() {
 
           <div className="grid grid-cols-3 gap-3 mt-10 w-full max-w-sm">
             {[
-              { value: '80%', label: en ? 'Less Returns' : 'Menos Devol.' },
-              { value: '50K+', label: en ? 'Try-ons' : 'Pruebas' },
-              { value: '3s', label: en ? 'Per Render' : 'Por Render' },
+              { value: en ? 'Zero' : 'Cero', label: en ? 'Returns' : 'Devoluciones' },
+              { value: en ? 'Real' : 'Real', label: en ? 'Your Body' : 'Tu Cuerpo' },
+              { value: en ? 'Instant' : 'Al Inst.', label: en ? 'Preview' : 'Vista Previa' },
             ].map((stat, i) => (
               <div
                 key={i}
