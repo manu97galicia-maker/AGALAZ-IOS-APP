@@ -52,7 +52,7 @@ export async function generateTryOnImage(
     parts.push({ text: promptBase });
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash-exp',
+      model: 'gemini-2.0-flash',
       contents: { parts },
       config: {
         responseModalities: ["TEXT", "IMAGE"],
