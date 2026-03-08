@@ -58,7 +58,7 @@ export default function HomePage() {
         <div className="flex items-center gap-3">
           <LanguageToggle />
           <Link
-            href="/try-on"
+            href="/onboarding"
             className="px-5 py-2.5 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white/90 transition-all press-scale"
           >
             {t.start}
@@ -99,7 +99,7 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row gap-3 mt-10">
             <Link
-              href="/try-on"
+              href="/onboarding"
               className="flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:opacity-90 transition-all press-scale shadow-xl shadow-indigo-500/25 animate-glow"
             >
               <Sparkles size={18} />
@@ -191,7 +191,7 @@ export default function HomePage() {
           </h2>
           <p className="text-white/35 mb-8 max-w-md mx-auto text-sm">{t.ctaDesc}</p>
           <Link
-            href="/try-on"
+            href="/onboarding"
             className="inline-flex items-center gap-3 px-10 py-4 bg-white text-black font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-white/90 transition-all press-scale"
           >
             <Sparkles size={18} />

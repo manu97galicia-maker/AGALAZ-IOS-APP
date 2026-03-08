@@ -22,9 +22,9 @@ export default function PaywallPage() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="animate-fade-in-up flex-1 px-6 pt-4 pb-8 max-w-md mx-auto w-full flex flex-col relative z-10">
-        {/* Close */}
+        {/* Close → go to try-on (skip paywall) */}
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push('/try-on')}
           className="self-end p-2.5 glass rounded-full mb-6 hover:bg-white/10 transition-colors press-scale"
         >
           <X size={20} className="text-white/60" />
