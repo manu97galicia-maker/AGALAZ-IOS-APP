@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Sparkles, ArrowRight, User, Shirt, Palette, Calendar,
-  Flame, DollarSign, ShoppingBag, Zap, Crown, Heart,
-  Sun, Moon, Star, Target, Gem, Watch, Glasses,
+  Sparkles, ArrowRight, Shirt, Palette, Zap, Crown, Heart,
+  Sun, Star, Camera, Eye, Ruler, RotateCcw, ShoppingCart,
+  Smartphone, Scan, Image, Wand2, CheckCircle,
 } from 'lucide-react';
 import { useLang } from '@/components/LanguageProvider';
 import { LanguageToggle } from '@/components/LanguageToggle';
@@ -32,115 +32,112 @@ const useQuestions = (): Question[] => {
   return [
     {
       id: 1,
-      title: en ? 'What brings you here?' : '¿Qué te trae por aquí?',
-      subtitle: en ? 'Choose your main goal' : 'Elige tu objetivo principal',
+      title: en ? 'Ever bought something that didn\'t fit?' : '¿Alguna vez compraste algo que no te quedaba?',
+      subtitle: en ? 'We\'ve all been there' : 'A todos nos ha pasado',
       type: 'single',
       options: [
-        { id: 'tryon', label: en ? 'Try clothes before buying' : 'Probar ropa antes de comprar', icon: <Shirt size={24} />, gradient: 'from-indigo-500 to-violet-600' },
-        { id: 'style', label: en ? 'Discover my style' : 'Descubrir mi estilo', icon: <Sparkles size={24} />, gradient: 'from-amber-500 to-orange-600' },
-        { id: 'save', label: en ? 'Save money on returns' : 'Ahorrar en devoluciones', icon: <DollarSign size={24} />, gradient: 'from-emerald-500 to-teal-600' },
-        { id: 'fun', label: en ? 'Just for fun' : 'Solo por diversión', icon: <Heart size={24} />, gradient: 'from-pink-500 to-rose-600' },
+        { id: 'always', label: en ? 'All the time — I hate returns' : 'Siempre — odio las devoluciones', icon: <RotateCcw size={24} />, gradient: 'from-red-500 to-orange-600' },
+        { id: 'sometimes', label: en ? 'Sometimes — colors look different IRL' : 'A veces — los colores se ven distinto IRL', icon: <Palette size={24} />, gradient: 'from-amber-500 to-orange-600' },
+        { id: 'size', label: en ? 'Yes — sizes are never right online' : 'Sí — las tallas nunca aciertan online', icon: <Ruler size={24} />, gradient: 'from-indigo-500 to-violet-600' },
+        { id: 'rarely', label: en ? 'Rarely — but I want to be sure' : 'Poco — pero quiero estar seguro/a', icon: <CheckCircle size={24} />, gradient: 'from-emerald-500 to-teal-600' },
       ],
     },
     {
       id: 2,
-      title: en ? 'How do you identify?' : '¿Cómo te identificas?',
-      subtitle: en ? 'This helps us personalize your experience' : 'Esto nos ayuda a personalizar tu experiencia',
+      title: en ? 'What would you preview with AI?' : '¿Qué previsualizarías con IA?',
+      subtitle: en ? 'Pick your main use case' : 'Elige tu caso de uso principal',
       type: 'single',
       options: [
-        { id: 'woman', label: en ? 'Woman' : 'Mujer', icon: <User size={24} />, gradient: 'from-pink-500 to-fuchsia-600' },
-        { id: 'man', label: en ? 'Man' : 'Hombre', icon: <User size={24} />, gradient: 'from-blue-500 to-indigo-600' },
-        { id: 'nonbinary', label: en ? 'Non-binary' : 'No binario', icon: <Star size={24} />, gradient: 'from-violet-500 to-purple-600' },
-        { id: 'notsay', label: en ? 'Prefer not to say' : 'Prefiero no decir', icon: <Heart size={24} />, gradient: 'from-slate-500 to-slate-600' },
+        { id: 'color', label: en ? 'Check if a color suits me' : 'Ver si un color me queda bien', icon: <Palette size={24} />, gradient: 'from-violet-500 to-fuchsia-600' },
+        { id: 'fit', label: en ? 'See how a garment fits my body' : 'Ver cómo me queda una prenda', icon: <Scan size={24} />, gradient: 'from-indigo-500 to-blue-600' },
+        { id: 'compare', label: en ? 'Compare outfits before buying' : 'Comparar outfits antes de comprar', icon: <Image size={24} />, gradient: 'from-emerald-500 to-teal-600' },
+        { id: 'style', label: en ? 'Try new styles risk-free' : 'Probar estilos nuevos sin riesgo', icon: <Wand2 size={24} />, gradient: 'from-amber-500 to-orange-600' },
       ],
     },
     {
       id: 3,
-      title: en ? 'What\'s your style vibe?' : '¿Cuál es tu onda de estilo?',
-      subtitle: en ? 'Pick the one that feels most like you' : 'Elige el que más te represente',
+      title: en ? 'How it works' : 'Cómo funciona',
+      subtitle: en ? '3 photos → 1 AI render in seconds' : '3 fotos → 1 render IA en segundos',
       type: 'single',
       options: [
-        { id: 'minimal', label: en ? 'Minimalist' : 'Minimalista', icon: <Target size={24} />, gradient: 'from-slate-400 to-slate-600' },
-        { id: 'streetwear', label: 'Streetwear', icon: <Flame size={24} />, gradient: 'from-red-500 to-orange-600' },
-        { id: 'elegant', label: en ? 'Elegant' : 'Elegante', icon: <Crown size={24} />, gradient: 'from-amber-500 to-yellow-600' },
-        { id: 'casual', label: 'Casual', icon: <Sun size={24} />, gradient: 'from-sky-500 to-blue-600' },
-        { id: 'bold', label: en ? 'Bold & Creative' : 'Atrevido y Creativo', icon: <Palette size={24} />, gradient: 'from-fuchsia-500 to-pink-600' },
+        { id: 'face', label: en ? '1. Snap your face' : '1. Foto de tu cara', icon: <Camera size={24} />, gradient: 'from-pink-500 to-rose-600' },
+        { id: 'body', label: en ? '2. Full body photo' : '2. Foto de cuerpo entero', icon: <Smartphone size={24} />, gradient: 'from-indigo-500 to-violet-600' },
+        { id: 'garment', label: en ? '3. Pick a garment' : '3. Elige una prenda', icon: <Shirt size={24} />, gradient: 'from-emerald-500 to-teal-600' },
+        { id: 'render', label: en ? '→ See it on you instantly' : '→ Míralo en ti al instante', icon: <Zap size={24} />, gradient: 'from-amber-500 to-yellow-600' },
       ],
     },
     {
       id: 4,
-      title: en ? 'Favorite colors to wear?' : '¿Colores favoritos para vestir?',
-      subtitle: en ? 'Select up to 3' : 'Selecciona hasta 3',
+      title: en ? 'Where do you usually shop?' : '¿Dónde sueles comprar?',
+      subtitle: en ? 'Preview works with any brand' : 'La vista previa funciona con cualquier marca',
       type: 'multi',
       options: [
-        { id: 'black', label: en ? 'Black' : 'Negro', icon: <Moon size={24} />, gradient: 'from-gray-700 to-gray-900' },
-        { id: 'white', label: en ? 'White' : 'Blanco', icon: <Sun size={24} />, gradient: 'from-gray-200 to-gray-400' },
-        { id: 'blue', label: en ? 'Blue' : 'Azul', icon: <Palette size={24} />, gradient: 'from-blue-500 to-blue-700' },
-        { id: 'earth', label: en ? 'Earth tones' : 'Tonos tierra', icon: <Palette size={24} />, gradient: 'from-amber-600 to-amber-800' },
-        { id: 'pastel', label: en ? 'Pastels' : 'Pastel', icon: <Palette size={24} />, gradient: 'from-pink-300 to-violet-400' },
-        { id: 'bold', label: en ? 'Bold colors' : 'Colores vivos', icon: <Palette size={24} />, gradient: 'from-red-500 to-fuchsia-600' },
+        { id: 'zara', label: 'Zara / H&M / Mango', icon: <ShoppingCart size={24} />, gradient: 'from-slate-500 to-slate-700' },
+        { id: 'nike', label: 'Nike / Adidas / Puma', icon: <Zap size={24} />, gradient: 'from-blue-500 to-indigo-600' },
+        { id: 'luxury', label: en ? 'Gucci / LV / Balenciaga' : 'Gucci / LV / Balenciaga', icon: <Crown size={24} />, gradient: 'from-amber-500 to-yellow-600' },
+        { id: 'online', label: 'SHEIN / ASOS / Amazon', icon: <Smartphone size={24} />, gradient: 'from-violet-500 to-purple-600' },
+        { id: 'thrift', label: en ? 'Thrift / Vintage' : 'Segunda mano / Vintage', icon: <Heart size={24} />, gradient: 'from-emerald-500 to-teal-600' },
       ],
     },
     {
       id: 5,
-      title: en ? 'What do you shop for most?' : '¿Qué compras más?',
-      subtitle: en ? 'Select all that apply' : 'Selecciona todos los que apliquen',
+      title: en ? 'What garments will you try on?' : '¿Qué prendas vas a probar?',
+      subtitle: en ? 'Select all that apply' : 'Selecciona todas las que apliquen',
       type: 'multi',
       options: [
-        { id: 'tops', label: en ? 'Tops & Shirts' : 'Camisetas y Tops', icon: <Shirt size={24} />, gradient: 'from-indigo-500 to-violet-600' },
+        { id: 'tshirts', label: en ? 'T-shirts & Tops' : 'Camisetas y Tops', icon: <Shirt size={24} />, gradient: 'from-indigo-500 to-violet-600' },
         { id: 'jackets', label: en ? 'Jackets & Coats' : 'Chaquetas y Abrigos', icon: <Shirt size={24} />, gradient: 'from-slate-500 to-slate-700' },
-        { id: 'dresses', label: en ? 'Dresses' : 'Vestidos', icon: <Gem size={24} />, gradient: 'from-rose-500 to-pink-600' },
-        { id: 'sportswear', label: 'Sportswear', icon: <Zap size={24} />, gradient: 'from-emerald-500 to-green-600' },
-        { id: 'accessories', label: en ? 'Accessories' : 'Accesorios', icon: <Watch size={24} />, gradient: 'from-amber-500 to-orange-600' },
+        { id: 'hoodies', label: 'Hoodies / Sweaters', icon: <Shirt size={24} />, gradient: 'from-blue-500 to-cyan-600' },
+        { id: 'shirts', label: en ? 'Dress Shirts' : 'Camisas', icon: <Shirt size={24} />, gradient: 'from-emerald-500 to-green-600' },
+        { id: 'sportswear', label: en ? 'Sportswear / Jerseys' : 'Ropa deportiva', icon: <Zap size={24} />, gradient: 'from-orange-500 to-red-600' },
       ],
     },
     {
       id: 6,
-      title: en ? 'Dress up for?' : '¿Te vistes para...?',
-      subtitle: en ? 'Pick your most common scenarios' : 'Elige tus escenarios más comunes',
-      type: 'multi',
+      title: en ? 'What matters most to you?' : '¿Qué es lo que más te importa?',
+      subtitle: en ? 'When previewing an outfit' : 'Al previsualizar un outfit',
+      type: 'single',
       options: [
-        { id: 'work', label: en ? 'Work / Office' : 'Trabajo / Oficina', icon: <Glasses size={24} />, gradient: 'from-blue-500 to-indigo-600' },
-        { id: 'casual', label: en ? 'Everyday casual' : 'Día a día casual', icon: <Sun size={24} />, gradient: 'from-amber-400 to-orange-500' },
-        { id: 'night', label: en ? 'Night out' : 'Salir de noche', icon: <Moon size={24} />, gradient: 'from-violet-600 to-purple-800' },
-        { id: 'events', label: en ? 'Special events' : 'Eventos especiales', icon: <Crown size={24} />, gradient: 'from-amber-500 to-yellow-600' },
-        { id: 'sport', label: en ? 'Gym / Sports' : 'Gimnasio / Deporte', icon: <Zap size={24} />, gradient: 'from-emerald-500 to-teal-600' },
+        { id: 'color_match', label: en ? 'Does this color match my skin?' : '¿Este color combina con mi piel?', icon: <Eye size={24} />, gradient: 'from-pink-500 to-rose-600' },
+        { id: 'fit_shape', label: en ? 'Does this fit my body shape?' : '¿Me queda bien con mi cuerpo?', icon: <Ruler size={24} />, gradient: 'from-indigo-500 to-violet-600' },
+        { id: 'overall_look', label: en ? 'How does the full outfit look?' : '¿Cómo se ve el outfit completo?', icon: <Star size={24} />, gradient: 'from-amber-500 to-yellow-600' },
+        { id: 'before_buy', label: en ? 'Will I regret buying this?' : '¿Me arrepentiré de comprarlo?', icon: <ShoppingCart size={24} />, gradient: 'from-emerald-500 to-teal-600' },
       ],
     },
     {
       id: 7,
-      title: en ? 'How adventurous are you?' : '¿Qué tan aventurero/a eres?',
-      subtitle: en ? 'When it comes to trying new looks' : 'A la hora de probar nuevos looks',
+      title: en ? 'AI preserves your real body' : 'La IA preserva tu cuerpo real',
+      subtitle: en ? 'No filters, no distortion — just the garment changes' : 'Sin filtros, sin distorsión — solo cambia la prenda',
       type: 'single',
       options: [
-        { id: 'safe', label: en ? 'I stick to what I know' : 'Me quedo con lo que conozco', icon: <Target size={24} />, gradient: 'from-slate-500 to-slate-600' },
-        { id: 'sometimes', label: en ? 'Open to suggestions' : 'Abierto/a a sugerencias', icon: <Sparkles size={24} />, gradient: 'from-indigo-500 to-violet-600' },
-        { id: 'always', label: en ? 'I love experimenting' : 'Me encanta experimentar', icon: <Flame size={24} />, gradient: 'from-red-500 to-orange-600' },
-        { id: 'trendsetter', label: en ? 'I set the trends' : 'Yo marco tendencia', icon: <Crown size={24} />, gradient: 'from-amber-500 to-yellow-600' },
+        { id: 'love', label: en ? 'Love it — I want to see the real me' : 'Me encanta — quiero verme de verdad', icon: <Heart size={24} />, gradient: 'from-pink-500 to-rose-600' },
+        { id: 'important', label: en ? 'That\'s exactly what I need' : 'Eso es exactamente lo que necesito', icon: <CheckCircle size={24} />, gradient: 'from-indigo-500 to-violet-600' },
+        { id: 'curious', label: en ? 'Sounds impressive — show me' : 'Suena impresionante — muéstramelo', icon: <Sparkles size={24} />, gradient: 'from-amber-500 to-yellow-600' },
+        { id: 'skeptical', label: en ? 'I\'ll believe it when I see it' : 'Lo creeré cuando lo vea', icon: <Eye size={24} />, gradient: 'from-slate-500 to-slate-600' },
       ],
     },
     {
       id: 8,
-      title: en ? 'What\'s your budget?' : '¿Cuál es tu presupuesto?',
-      subtitle: en ? 'Per clothing item on average' : 'Por prenda en promedio',
+      title: en ? 'How many returns do you make?' : '¿Cuántas devoluciones haces?',
+      subtitle: en ? 'Agalaz users reduce returns by 80%' : 'Los usuarios de Agalaz reducen devoluciones un 80%',
       type: 'single',
       options: [
-        { id: 'budget', label: en ? 'Under $30' : 'Menos de 30€', icon: <DollarSign size={24} />, gradient: 'from-emerald-500 to-green-600' },
-        { id: 'mid', label: en ? '$30 – $100' : '30€ – 100€', icon: <DollarSign size={24} />, gradient: 'from-blue-500 to-indigo-600' },
-        { id: 'premium', label: en ? '$100 – $300' : '100€ – 300€', icon: <Gem size={24} />, gradient: 'from-violet-500 to-purple-600' },
-        { id: 'luxury', label: en ? '$300+' : '300€+', icon: <Crown size={24} />, gradient: 'from-amber-500 to-yellow-600' },
+        { id: 'many', label: en ? '3+ per month — it\'s exhausting' : '3+ al mes — es agotador', icon: <RotateCcw size={24} />, gradient: 'from-red-500 to-orange-600' },
+        { id: 'some', label: en ? '1-2 per month' : '1-2 al mes', icon: <RotateCcw size={24} />, gradient: 'from-amber-500 to-orange-600' },
+        { id: 'few', label: en ? 'Occasionally' : 'De vez en cuando', icon: <RotateCcw size={24} />, gradient: 'from-blue-500 to-indigo-600' },
+        { id: 'avoid', label: en ? 'I avoid online shopping because of it' : 'Evito comprar online por eso', icon: <ShoppingCart size={24} />, gradient: 'from-violet-500 to-purple-600' },
       ],
     },
     {
       id: 9,
-      title: en ? 'How often do you shop?' : '¿Con qué frecuencia compras?',
-      subtitle: en ? 'Be honest, we won\'t judge!' : '¡Sé sincero/a, no juzgamos!',
+      title: en ? 'Ready to try it on?' : '¿Listo/a para probártelo?',
+      subtitle: en ? 'Your first 10 renders are free' : 'Tus primeros 10 renders son gratis',
       type: 'single',
       options: [
-        { id: 'rarely', label: en ? 'Rarely' : 'Raramente', icon: <Calendar size={24} />, gradient: 'from-slate-500 to-slate-600' },
-        { id: 'monthly', label: en ? 'Once a month' : 'Una vez al mes', icon: <ShoppingBag size={24} />, gradient: 'from-blue-500 to-indigo-600' },
-        { id: 'weekly', label: en ? 'Weekly' : 'Semanalmente', icon: <ShoppingBag size={24} />, gradient: 'from-violet-500 to-purple-600' },
-        { id: 'addicted', label: en ? 'I can\'t stop!' : '¡No puedo parar!', icon: <Flame size={24} />, gradient: 'from-red-500 to-orange-600' },
+        { id: 'ready', label: en ? 'Yes! Let\'s go' : '¡Sí! Vamos', icon: <Zap size={24} />, gradient: 'from-indigo-500 to-violet-600' },
+        { id: 'excited', label: en ? 'I already have a garment in mind' : 'Ya tengo una prenda en mente', icon: <Shirt size={24} />, gradient: 'from-emerald-500 to-teal-600' },
+        { id: 'explore', label: en ? 'I want to explore first' : 'Quiero explorar primero', icon: <Sun size={24} />, gradient: 'from-amber-500 to-yellow-600' },
+        { id: 'curious', label: en ? 'Show me what AI can do' : 'Muéstrame lo que puede hacer la IA', icon: <Sparkles size={24} />, gradient: 'from-pink-500 to-rose-600' },
       ],
     },
     {
@@ -231,22 +228,22 @@ export default function OnboardingPage() {
           </div>
 
           <h1 className="text-4xl font-black text-white text-center tracking-tight leading-tight">
-            {en ? 'Your AI Stylist' : 'Tu Estilista IA'}
+            {en ? 'Preview Before' : 'Previsualiza Antes'}
             <br />
-            <span className="text-gradient italic">{en ? 'is Ready.' : 'está Listo.'}</span>
+            <span className="text-gradient italic">{en ? 'You Buy.' : 'de Comprar.'}</span>
           </h1>
 
           <p className="text-white/35 text-center mt-4 max-w-xs text-[15px] leading-relaxed">
             {en
-              ? 'We\'ve personalized your experience. Try on any clothing instantly with AI precision.'
-              : 'Hemos personalizado tu experiencia. Prueba cualquier prenda al instante con precisión IA.'}
+              ? 'See how any garment looks on your real body. No more wrong sizes, no more surprise colors.'
+              : 'Ve cómo te queda cualquier prenda en tu cuerpo real. Sin tallas equivocadas, sin colores sorpresa.'}
           </p>
 
           <div className="grid grid-cols-3 gap-3 mt-10 w-full max-w-sm">
             {[
-              { value: '10K+', label: en ? 'Users' : 'Usuarios' },
+              { value: '80%', label: en ? 'Less Returns' : 'Menos Devol.' },
               { value: '50K+', label: en ? 'Try-ons' : 'Pruebas' },
-              { value: '4.9★', label: 'Rating' },
+              { value: '3s', label: en ? 'Per Render' : 'Por Render' },
             ].map((stat, i) => (
               <div
                 key={i}
