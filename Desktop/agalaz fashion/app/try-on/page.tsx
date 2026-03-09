@@ -19,25 +19,12 @@ import {
   ChevronLeft,
   Download,
   Share2,
+  ImagePlus,
 } from 'lucide-react';
 import { ImageUploader } from '@/components/ImageUploader';
 import { onAuthStateChange, type AppUser } from '@/services/authService';
 import { Role, type ChatMessage } from '@/types';
 import { useLang } from '@/components/LanguageProvider';
-
-const IMAGE_KEYWORDS = [
-  'color', 'talla', 'peinado', 'cambia', 'pon', 'ajusta', 'vea', 'prenda',
-  'adjuntar', 'mira', 'foto', 'render', 'estilo', 'look', 'quede', 'prueba',
-  'cuerpo', 'realista', 'luz', 'change', 'put', 'adjust', 'style', 'try',
-  'sleeve', 'manga', 'shorter', 'longer', 'bigger', 'smaller',
-  'dark', 'light', 'oscuro', 'claro', 'rojo', 'azul', 'verde', 'negro', 'blanco',
-  'red', 'blue', 'green', 'black', 'white', 'pink', 'rosa', 'amarillo', 'yellow',
-  'tight', 'loose', 'apretado', 'suelto', 'largo', 'corto', 'long', 'short',
-  'add', 'remove', 'quita', 'añade', 'otra', 'other', 'different', 'diferente',
-  'hood', 'capucha', 'zip', 'cremallera', 'botones', 'buttons', 'collar', 'cuello',
-  'stripe', 'rayas', 'logo', 'print', 'graphic', 'pattern', 'patrón',
-  'tighter', 'wider', 'más', 'less', 'menos', 'without', 'sin', 'con', 'with',
-];
 
 export default function TryOnPage() {
   const router = useRouter();
@@ -55,6 +42,8 @@ export default function TryOnPage() {
   const [error, setError] = useState<string | null>(null);
   const [renderCount, setRenderCount] = useState(0);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
+  const [chatAttachment, setChatAttachment] = useState<string | null>(null);
+  const chatFileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const { data: { subscription } } = onAuthStateChange((authUser) => {
@@ -156,10 +145,31 @@ export default function TryOnPage() {
     setIsGeneratingImage(false);
   };
 
+  const handleChatFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(',')[1];
+        setChatAttachment(base64);
+      };
+      reader.readAsDataURL(file);
+    }
+    e.target.value = '';
+  };
+
   const handleSendMessage = async (text: string) => {
     if (!text.trim() || isAnalyzing || isGeneratingImage) return;
 
-    setMessages((prev) => [...prev, { role: Role.USER, text }]);
+    const attachedImage = chatAttachment;
+    setChatAttachment(null);
+
+    setMessages((prev) => [...prev, {
+      role: Role.USER,
+      text: attachedImage ? `${text} [+image]` : text,
+      image: attachedImage ? `data:image/jpeg;base64,${attachedImage}` : undefined,
+    }]);
     setInputValue('');
     setIsAnalyzing(true);
     setError(null);
@@ -185,7 +195,10 @@ export default function TryOnPage() {
       const hasExistingImage = messages.some((m) => m.image);
       if (hasExistingImage) {
         setIsGeneratingImage(true);
-        const lastImage = [...messages].reverse().find((m) => m.image)?.image;
+        const lastImage = [...messages].reverse().find((m) => m.image && m.role === Role.MODEL)?.image;
+
+        // If user attached an image, use it as clothing reference
+        const effectiveClothing = attachedImage || clothingImage;
 
         let genData: any = null;
         for (let attempt = 0; attempt < 2; attempt++) {
@@ -196,7 +209,7 @@ export default function TryOnPage() {
               body: JSON.stringify({
                 faceImage,
                 bodyImage,
-                clothingImage,
+                clothingImage: effectiveClothing,
                 modificationPrompt: text,
                 lastRenderedImage: lastImage,
               }),
@@ -421,7 +434,16 @@ export default function TryOnPage() {
                   className={`flex flex-col ${msg.role === Role.USER ? 'items-end' : 'items-start'} animate-fade-in-up`}
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >
-                  {msg.image ? (
+                  {msg.role === Role.USER && msg.image ? (
+                    <div className="max-w-[85%] space-y-2">
+                      <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl rounded-br-sm p-4">
+                        <p className="text-[13px] font-bold text-white">{msg.text.replace(' [+image]', '')}</p>
+                      </div>
+                      <div className="w-16 h-16 rounded-xl overflow-hidden ring-2 ring-indigo-500/30 ml-auto">
+                        <img src={msg.image} alt="Reference" className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                  ) : msg.image ? (
                     <div className="w-full space-y-2" style={{ maxWidth: '95%' }}>
                       <button
                         onClick={() => setFullscreenImage(msg.image!)}
@@ -527,8 +549,31 @@ export default function TryOnPage() {
                 ))}
               </div>
             )}
+            {/* Attachment preview */}
+            {chatAttachment && (
+              <div className="px-4 pt-2 flex items-center gap-2">
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden ring-2 ring-indigo-500/50">
+                  <img src={`data:image/jpeg;base64,${chatAttachment}`} alt="Attached" className="w-full h-full object-cover" />
+                  <button
+                    onClick={() => setChatAttachment(null)}
+                    className="absolute -top-0.5 -right-0.5 bg-black/80 rounded-full p-0.5"
+                  >
+                    <X size={10} className="text-white" />
+                  </button>
+                </div>
+                <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest">
+                  {lang === 'es' ? 'Referencia adjunta' : 'Reference attached'}
+                </span>
+              </div>
+            )}
             <div className="max-w-md mx-auto flex items-center gap-2 p-1.5 px-4">
               <div className="flex-1 flex items-center gap-2 p-1.5 glass rounded-2xl">
+                <button
+                  onClick={() => chatFileRef.current?.click()}
+                  className="p-3 rounded-xl hover:bg-white/10 transition-colors press-scale shrink-0"
+                >
+                  <ImagePlus size={18} className={chatAttachment ? 'text-indigo-400' : 'text-white/25'} />
+                </button>
                 <input
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
@@ -536,7 +581,7 @@ export default function TryOnPage() {
                     if (e.key === 'Enter') handleSendMessage(inputValue);
                   }}
                   placeholder={t.chatPlaceholder}
-                  className="flex-1 px-4 py-3 text-[13px] font-bold text-white placeholder:text-white/20 bg-transparent outline-none"
+                  className="flex-1 px-2 py-3 text-[13px] font-bold text-white placeholder:text-white/20 bg-transparent outline-none"
                   enterKeyHint="send"
                   autoComplete="off"
                 />
@@ -553,6 +598,13 @@ export default function TryOnPage() {
                 </button>
               </div>
             </div>
+            <input
+              ref={chatFileRef}
+              type="file"
+              accept="image/*"
+              onChange={handleChatFileChange}
+              className="hidden"
+            />
           </div>
         )}
       </div>
