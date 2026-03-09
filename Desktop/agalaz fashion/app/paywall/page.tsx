@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, Zap, Check, CreditCard, Star, Shield, Crown, Loader2, Gift } from 'lucide-react';
+import { X, Zap, Check, Star, Shield, Crown, Gift } from 'lucide-react';
+
 import { useLang } from '@/components/LanguageProvider';
 
 type Plan = 'weekly' | 'yearly';
@@ -12,7 +13,6 @@ export default function PaywallPage() {
   const { t, lang } = useLang();
   const en = lang === 'en';
   const [selected, setSelected] = useState<Plan>('yearly');
-  const [loading, setLoading] = useState(false);
 
   const features = [
     t.payFeat1,
@@ -43,25 +43,13 @@ export default function PaywallPage() {
 
   const activePlan = plans[selected];
 
-  const handleSubscribe = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: selected }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || 'Error creating checkout session');
-      }
-    } catch {
-      alert(en ? 'Connection error. Try again.' : 'Error de conexión. Inténtalo de nuevo.');
-    } finally {
-      setLoading(false);
-    }
+  const PAYMENT_LINKS: Record<Plan, string> = {
+    weekly: 'https://buy.stripe.com/bJe6oHfZkeIogkt4utfYY0g',
+    yearly: 'https://buy.stripe.com/dRm4gz00mgQwb099ONfYY0f',
+  };
+
+  const handleSubscribe = () => {
+    window.location.href = PAYMENT_LINKS[selected];
   };
 
   return (
@@ -214,16 +202,11 @@ export default function PaywallPage() {
         <div className="space-y-3 mt-4">
           <button
             onClick={handleSubscribe}
-            disabled={loading}
-            className="w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-all press-scale shadow-xl shadow-indigo-500/25 animate-glow disabled:opacity-50"
+            className="w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-all press-scale shadow-xl shadow-indigo-500/25 animate-glow"
           >
-            {loading ? (
-              <Loader2 size={18} className="text-white animate-spin" />
-            ) : (
-              <Crown size={18} className="text-white" />
-            )}
+            <Crown size={18} className="text-white" />
             <span className="text-white font-black uppercase tracking-widest text-xs">
-              {loading ? (en ? 'Loading...' : 'Cargando...') : activePlan.cta}
+              {activePlan.cta}
             </span>
           </button>
 
