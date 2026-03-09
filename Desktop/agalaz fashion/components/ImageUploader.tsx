@@ -107,7 +107,6 @@ export function ImageUploader({ label, type, image, onImageSelect, icon }: Image
         ref={inputRef}
         type="file"
         accept="image/*"
-        capture={type === 'user' ? 'user' : undefined}
         onChange={handleInputChange}
         className="hidden"
       />
