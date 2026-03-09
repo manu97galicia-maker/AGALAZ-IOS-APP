@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, Zap, Check, CreditCard, Star, Shield, Crown, Loader2 } from 'lucide-react';
+import { X, Zap, Check, CreditCard, Star, Shield, Crown, Loader2, Gift } from 'lucide-react';
 import { useLang } from '@/components/LanguageProvider';
 
 type Plan = 'weekly' | 'yearly';
@@ -29,7 +29,7 @@ export default function PaywallPage() {
       perDay: en ? '$0.71/day' : '0,71€/día',
       label: en ? 'Weekly' : 'Semanal',
       badge: null,
-      cta: en ? 'Start Weekly Plan' : 'Empezar Plan Semanal',
+      cta: en ? 'Start Free Trial' : 'Empezar Prueba Gratis',
     },
     yearly: {
       price: '$59.99',
@@ -37,7 +37,7 @@ export default function PaywallPage() {
       perDay: en ? '$0.16/day' : '0,16€/día',
       label: en ? 'Yearly' : 'Anual',
       badge: en ? 'Save 77%' : 'Ahorra 77%',
-      cta: en ? 'Start Yearly Plan' : 'Empezar Plan Anual',
+      cta: en ? 'Start Free Trial' : 'Empezar Prueba Gratis',
     },
   };
 
@@ -81,6 +81,21 @@ export default function PaywallPage() {
 
         {/* Content */}
         <div className="flex-1 space-y-5">
+          {/* FREE TRIAL Banner */}
+          <div className="w-full p-4 bg-gradient-to-r from-emerald-500/15 to-teal-500/15 rounded-2xl border border-emerald-500/30 flex items-center gap-3">
+            <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center shrink-0">
+              <Gift size={20} className="text-emerald-400" />
+            </div>
+            <div>
+              <span className="text-emerald-400 font-black text-sm uppercase tracking-wide">
+                {en ? '3-Day Free Trial' : '3 Días de Prueba Gratis'}
+              </span>
+              <p className="text-emerald-400/60 text-[10px] font-bold mt-0.5">
+                {en ? 'Cancel anytime — no charge until trial ends' : 'Cancela cuando quieras — sin cargo hasta que acabe'}
+              </p>
+            </div>
+          </div>
+
           {/* Badge */}
           <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-full w-fit shadow-lg shadow-indigo-500/25">
             <Zap size={14} className="text-white fill-white" />
@@ -212,15 +227,15 @@ export default function PaywallPage() {
             </span>
           </button>
 
+          <p className="text-center text-emerald-400/70 text-[11px] font-black uppercase tracking-widest">
+            {en ? '✓ 3 days free · Cancel anytime' : '✓ 3 días gratis · Cancela cuando quieras'}
+          </p>
+
           <div className="flex items-center justify-center gap-4">
             <button className="flex items-center gap-1.5 press-scale py-2">
               <Shield size={12} className="text-white/15" />
               <span className="text-white/15 font-bold text-[11px]">{t.restorePurchase}</span>
             </button>
-            <span className="text-white/10">·</span>
-            <span className="text-white/15 text-[10px] font-bold">
-              {en ? 'Cancel anytime' : 'Cancela cuando quieras'}
-            </span>
           </div>
         </div>
       </div>

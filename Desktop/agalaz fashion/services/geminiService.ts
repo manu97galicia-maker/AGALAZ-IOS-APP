@@ -38,7 +38,6 @@ export async function generateTryOnImage(
     }
 
     const hasGarment = !!clothingImage;
-    const imgOffset = hasGarment ? 0 : -1;
     const lastImgLabel = hasGarment
       ? (lastRenderedImage ? 'IMG 4' : null)
       : (lastRenderedImage ? 'IMG 3' : null);
@@ -71,26 +70,52 @@ export async function generateTryOnImage(
 
     QUALITY: 8k, photorealistic, perfect skin blending, no anatomical distortions.`;
 
-    parts.push({ text: promptBase });
+    parts.push({ text: promptBase + "\n\nIMPORTANT: You MUST output a generated image. Do NOT respond with text only. Generate the composite image now." });
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash-exp-image-generation',
+      model: 'gemini-2.5-flash-image',
       contents: { parts },
       config: {
         responseModalities: ["TEXT", "IMAGE"],
       },
     });
 
-    if (response.candidates?.[0]?.content?.parts) {
-      for (const part of response.candidates[0].content.parts) {
-        if ((part as any).inlineData?.data) {
-          return `data:image/png;base64,${(part as any).inlineData.data}`;
-        }
+    // Log full response structure for debugging
+    const candidate = response.candidates?.[0];
+    const responseParts = candidate?.content?.parts || [];
+    console.log("Gemini response - finishReason:", candidate?.finishReason, "parts count:", responseParts.length);
+
+    for (const part of responseParts) {
+      if ((part as any).inlineData?.data) {
+        console.log("Image found in response, size:", (part as any).inlineData.data.length);
+        return `data:image/png;base64,${(part as any).inlineData.data}`;
+      }
+      if ((part as any).text) {
+        console.log("Text part:", (part as any).text.substring(0, 200));
       }
     }
+
+    const finishReason = candidate?.finishReason;
+    if (finishReason && finishReason !== 'STOP') {
+      console.error("Generation blocked, reason:", finishReason);
+    } else {
+      console.error("No image in response. Full response:", JSON.stringify(response).substring(0, 500));
+    }
+
     return null;
-  } catch (error) {
-    console.error("Precision rendering error:", error);
+  } catch (error: any) {
+    const status = error?.status || error?.code;
+    const message = error?.message || '';
+
+    if (status === 429) {
+      console.error("Rate limit exceeded.");
+    } else if (status === 400 && message.includes('response modalities')) {
+      console.error("Model does not support image generation. Check model name.");
+    } else if (message.includes('SAFETY')) {
+      console.error("Content blocked by safety filters.");
+    } else {
+      console.error("Precision rendering error:", status, message || error);
+    }
     return null;
   }
 }

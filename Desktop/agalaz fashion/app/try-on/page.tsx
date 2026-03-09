@@ -30,12 +30,19 @@ const IMAGE_KEYWORDS = [
   'adjuntar', 'mira', 'foto', 'render', 'estilo', 'look', 'quede', 'prueba',
   'cuerpo', 'realista', 'luz', 'change', 'put', 'adjust', 'style', 'try',
   'sleeve', 'manga', 'shorter', 'longer', 'bigger', 'smaller',
+  'dark', 'light', 'oscuro', 'claro', 'rojo', 'azul', 'verde', 'negro', 'blanco',
+  'red', 'blue', 'green', 'black', 'white', 'pink', 'rosa', 'amarillo', 'yellow',
+  'tight', 'loose', 'apretado', 'suelto', 'largo', 'corto', 'long', 'short',
+  'add', 'remove', 'quita', 'añade', 'otra', 'other', 'different', 'diferente',
+  'hood', 'capucha', 'zip', 'cremallera', 'botones', 'buttons', 'collar', 'cuello',
+  'stripe', 'rayas', 'logo', 'print', 'graphic', 'pattern', 'patrón',
+  'tighter', 'wider', 'más', 'less', 'menos', 'without', 'sin', 'con', 'with',
 ];
 
 export default function TryOnPage() {
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { t } = useLang();
+  const { t, lang } = useLang();
 
   const [user, setUser] = useState<AppUser | null>(null);
   const [faceImage, setFaceImage] = useState<string | null>(null);
@@ -81,7 +88,9 @@ export default function TryOnPage() {
     try {
       const blob = await fetch(imageUrl).then(r => r.blob());
       const file = new File([blob], `agalaz-${Date.now()}.png`, { type: 'image/png' });
-      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      const canShare = typeof navigator.share === 'function' && typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] });
+      if (canShare) {
+        await navigator.share({ files: [file] });
         return;
       }
       const a = document.createElement('a');
@@ -106,31 +115,45 @@ export default function TryOnPage() {
     setError(null);
     setMessages([]);
 
-    try {
-      const res = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ faceImage, bodyImage, clothingImage }),
-      });
-      const data = await res.json();
+    let retries = 0;
+    const maxRetries = 2;
 
-      if (data.image) {
-        setMessages([{
-          role: Role.MODEL,
-          text: clothingImage ? t.segmented : (t.seamlessId),
-          image: data.image,
-        }]);
-        setRenderCount((prev) => prev + 1);
-        saveToGallery(data.image);
-      } else {
-        setError(data.error || t.precisionError);
+    while (retries <= maxRetries) {
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ faceImage, bodyImage, clothingImage }),
+        });
+        const data = await res.json();
+
+        if (data.image) {
+          setMessages([{
+            role: Role.MODEL,
+            text: clothingImage ? t.segmented : (t.seamlessId),
+            image: data.image,
+          }]);
+          setRenderCount((prev) => prev + 1);
+          saveToGallery(data.image);
+          break;
+        } else if (retries < maxRetries) {
+          retries++;
+          continue;
+        } else {
+          setError(data.error || t.precisionError);
+        }
+      } catch {
+        if (retries < maxRetries) {
+          retries++;
+          continue;
+        }
+        setError(t.engineError);
       }
-    } catch {
-      setError(t.engineError);
-    } finally {
-      setIsAnalyzing(false);
-      setIsGeneratingImage(false);
+      break;
     }
+
+    setIsAnalyzing(false);
+    setIsGeneratingImage(false);
   };
 
   const handleSendMessage = async (text: string) => {
@@ -158,26 +181,34 @@ export default function TryOnPage() {
       setMessages((prev) => [...prev, { role: Role.MODEL, text: modelText }]);
       setIsAnalyzing(false);
 
-      const query = text.toLowerCase();
-      const needsImage = IMAGE_KEYWORDS.some((k) => query.includes(k));
-
-      if (needsImage) {
+      // Always attempt image re-generation for any chat message (user is modifying the result)
+      const hasExistingImage = messages.some((m) => m.image);
+      if (hasExistingImage) {
         setIsGeneratingImage(true);
         const lastImage = [...messages].reverse().find((m) => m.image)?.image;
-        const genRes = await fetch('/api/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            faceImage,
-            bodyImage,
-            clothingImage,
-            modificationPrompt: text,
-            lastRenderedImage: lastImage,
-          }),
-        });
-        const genData = await genRes.json();
 
-        if (genData.image) {
+        let genData: any = null;
+        for (let attempt = 0; attempt < 2; attempt++) {
+          try {
+            const genRes = await fetch('/api/generate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                faceImage,
+                bodyImage,
+                clothingImage,
+                modificationPrompt: text,
+                lastRenderedImage: lastImage,
+              }),
+            });
+            genData = await genRes.json();
+            if (genData.image) break;
+          } catch {
+            if (attempt === 1) break;
+          }
+        }
+
+        if (genData?.image) {
           setMessages((prev) => {
             const newMsgs = [...prev];
             const lastMsg = newMsgs[newMsgs.length - 1];
@@ -310,7 +341,7 @@ export default function TryOnPage() {
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto px-4 py-4 hide-scrollbar"
-          style={{ paddingBottom: messages.length > 0 ? 110 : 20 }}
+          style={{ paddingBottom: messages.length > 0 ? 140 : 20 }}
         >
           {messages.length === 0 ? (
             <div className="max-w-md mx-auto space-y-6 animate-fade-in">
@@ -478,28 +509,49 @@ export default function TryOnPage() {
 
         {/* Chat Input */}
         {messages.length > 0 && (
-          <div className="fixed bottom-0 left-0 right-0 p-4 glass-dark z-20" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
-            <div className="max-w-md mx-auto flex items-center gap-2 p-1.5 glass rounded-2xl">
-              <input
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleSendMessage(inputValue);
-                }}
-                placeholder={t.chatPlaceholder}
-                className="flex-1 px-4 py-3 text-[13px] font-bold text-white placeholder:text-white/20 bg-transparent outline-none"
-              />
-              <button
-                onClick={() => handleSendMessage(inputValue)}
-                disabled={!inputValue.trim() || isLoading}
-                className={`p-3 rounded-xl transition-all press-scale ${
-                  !inputValue.trim() || isLoading
-                    ? 'bg-white/5'
-                    : 'bg-gradient-to-r from-indigo-600 to-violet-600 shadow-lg shadow-indigo-500/20'
-                }`}
-              >
-                <Send size={18} className={!inputValue.trim() || isLoading ? 'text-white/20' : 'text-white'} />
-              </button>
+          <div className="fixed bottom-0 left-0 right-0 glass-dark z-20" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+            {/* Quick suggestion chips */}
+            {!isLoading && messages.some(m => m.image) && (
+              <div className="flex gap-2 px-4 pt-3 pb-1 overflow-x-auto hide-scrollbar">
+                {(lang === 'es'
+                  ? ['Manga larga', 'Cambiar color', 'Más oscuro', 'Sin logo', 'Más ajustado']
+                  : ['Long sleeves', 'Change color', 'Darker', 'No logo', 'Tighter fit']
+                ).map((chip) => (
+                  <button
+                    key={chip}
+                    onClick={() => handleSendMessage(chip)}
+                    className="shrink-0 px-3 py-1.5 glass rounded-full text-[10px] font-bold text-white/40 hover:text-white/60 hover:bg-white/10 transition-all press-scale"
+                  >
+                    {chip}
+                  </button>
+                ))}
+              </div>
+            )}
+            <div className="max-w-md mx-auto flex items-center gap-2 p-1.5 px-4">
+              <div className="flex-1 flex items-center gap-2 p-1.5 glass rounded-2xl">
+                <input
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSendMessage(inputValue);
+                  }}
+                  placeholder={t.chatPlaceholder}
+                  className="flex-1 px-4 py-3 text-[13px] font-bold text-white placeholder:text-white/20 bg-transparent outline-none"
+                  enterKeyHint="send"
+                  autoComplete="off"
+                />
+                <button
+                  onClick={() => handleSendMessage(inputValue)}
+                  disabled={!inputValue.trim() || isLoading}
+                  className={`p-3 rounded-xl transition-all press-scale ${
+                    !inputValue.trim() || isLoading
+                      ? 'bg-white/5'
+                      : 'bg-gradient-to-r from-indigo-600 to-violet-600 shadow-lg shadow-indigo-500/20'
+                  }`}
+                >
+                  <Send size={18} className={!inputValue.trim() || isLoading ? 'text-white/20' : 'text-white'} />
+                </button>
+              </div>
             </div>
           </div>
         )}
